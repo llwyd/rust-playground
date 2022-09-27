@@ -11,6 +11,7 @@ use rocket_dyn_templates::{Template, handlebars, context};
 fn index() -> Template {
     Template::render("index", context! {
         text: "Helllloooooo",
+        render_time: "????",
     })
 }
 
