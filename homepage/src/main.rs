@@ -8,12 +8,16 @@ use rocket_dyn_templates::{Template, handlebars, context};
 //use self::handlebars::{Handlebars, JsonRender};
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+fn index() -> Template {
+    Template::render("index", context! {
+        text: "Helllloooooo",
+    })
 }
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .mount("/", routes![index])
+        .attach(Template::fairing())
 }
 
