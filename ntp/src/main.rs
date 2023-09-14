@@ -1,5 +1,5 @@
 use std::net::{ToSocketAddrs, UdpSocket};
-use chrono::{DateTime, Utc, TimeZone};
+use chrono::{Utc, TimeZone};
 
 fn calculate_ntp_time(buffer:&[u8]) -> u32 {
     let time_bytes: [u8;4] = buffer[40..44].try_into().expect("Failed to slice");
@@ -33,7 +33,7 @@ fn main() {
     let bytes_sent = socket.send_to(&buffer[..], addr).expect("Couldn't send");
     assert_eq!(bytes_sent, PACKET_SIZE);
 
-    let (bytes_recv, src_addr) = socket.recv_from(&mut buffer).expect("Nothing received");
+    let (bytes_recv, _) = socket.recv_from(&mut buffer).expect("Nothing received");
     assert_eq!(bytes_recv, PACKET_SIZE);
 
     let ntp_time = calculate_ntp_time(&buffer[..]);
