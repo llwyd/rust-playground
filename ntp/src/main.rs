@@ -1,6 +1,11 @@
 use std::net::{ToSocketAddrs, UdpSocket};
 use chrono::{Utc, TimeZone};
 
+fn get_ip(address:&str) -> String {
+    let mut addrs = address.to_socket_addrs().unwrap();
+    addrs.next().expect("Error").to_string()
+}
+
 fn calculate_ntp_time(buffer:&[u8]) -> u32 {
     let time_bytes: [u8;4] = buffer[40..44].try_into().expect("Failed to slice");
     u32::from_be_bytes(time_bytes)
@@ -23,8 +28,7 @@ fn main() {
     buffer[0] = 0x23;
 
     let ntp_address = "pool.ntp.org:123";
-    let mut addrs = ntp_address.to_socket_addrs().unwrap();
-    let addr = addrs.next().expect("Error").to_string();
+    let addr = get_ip(ntp_address);
 
     println!("Requesting NTP from {} ({})", ntp_address, addr);
 
