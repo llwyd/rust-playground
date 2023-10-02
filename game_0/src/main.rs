@@ -39,7 +39,7 @@ fn view(app: &App, model: &Model, frame: Frame){
 
     draw.polyline()
         .weight(20.0)
-        .rotate(model.rotation_angle)
+        .rotate(-model.rotation_angle)
         .points_colored(points);
     draw.to_frame(app, &frame).unwrap();
 }
