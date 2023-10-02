@@ -7,20 +7,25 @@ fn main() {
         .run();
 }
 
-struct Model {}
+struct Model {
+    rotation_angle: f32,
+}
 
 fn model(_app: &App) -> Model {
-    Model {}
+    Model {
+        rotation_angle:0.0,
+    }
 }
 
-fn update(_app: &App, _model: &mut Model, _update: Update) {
-
+fn update(_app: &App, model: &mut Model, _update: Update) {
+    model.rotation_angle += 0.15;
 }
 
-fn view(app: &App, _model: &Model, frame: Frame){
+fn view(app: &App, model: &Model, frame: Frame){
     let draw = app.draw();
-    
-    let mut radius = 0.10;
+    draw.background().color(WHITE);
+
+    let mut radius = 0.0;
 
     let points = (0..36000).map(|i| {
         let radian = deg_to_rad(i as f32);
@@ -28,12 +33,13 @@ fn view(app: &App, _model: &Model, frame: Frame){
         let x = radian.sin() * radius;
         let y = radian.cos() * radius;
 
-        radius += 0.10;
-        (pt2(x,y), WHITE)
+        radius += 0.15;
+        (pt2(x,y), BLACK)
     });
 
     draw.polyline()
-        .weight(15.0)
+        .weight(20.0)
+        .rotate(model.rotation_angle)
         .points_colored(points);
     draw.to_frame(app, &frame).unwrap();
 }
